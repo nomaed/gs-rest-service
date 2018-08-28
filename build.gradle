@@ -1,19 +1,25 @@
 buildscript {
+    ext {
+//        springBootVersion = '2.0.3.RELEASE'
+        springBootVersion = '1.5.10.RELEASE'
+        grpcVersion = '1.11.0'
+        guavaVersion = '23.0'
+    }
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-bootJar {
+jar {
+//bootjar {
     baseName = 'gs-rest-service'
     version =  '0.1.0'
 }
@@ -22,12 +28,59 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Edgware.SR2'
+    }
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('com.jayway.jsonpath:json-path')
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '5.6.5'
+    compile group: 'org.elasticsearch.client', name: 'transport', version: '5.6.5'
+    compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.3.3.Final'
+    compile('org.springframework.boot:spring-boot-starter')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile 'org.springframework.cloud:spring-cloud-netflix-core'
+    compile 'org.springframework.cloud:spring-cloud-starter-feign'
+    compile 'org.springframework.cloud:spring-cloud-starter-hystrix-dashboard'
+
+    compile('org.springframework.cloud:spring-cloud-starter-config')
+    compile('io.fabric8:spring-cloud-starter-kubernetes-netflix:0.1.6')
+
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    compile group: 'org.apache.geode', name: 'geode-core', version: '1.1.0'
+    compile("com.github.ben-manes.caffeine:caffeine")
+    compile "com.fasterxml.jackson.core:jackson-annotations"
+    compile "com.google.guava:guava:${guavaVersion}"
+    compile "org.apache.commons:commons-lang3:3.0"
+    compile "commons-codec:commons-codec:1.5"
+    compile 'com.maxmind.geoip2:geoip2:2.11.0'
+    compile "org.springframework.boot:spring-boot-starter-logging"
+
+    compile "org.hibernate:hibernate-core:5.0.12.Final"
+    compile "org.hibernate:hibernate-ehcache:5.0.12.Final"
+
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.4'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-xjc', version: '2.2.4'
+
+    compile 'com.h2database:h2:1.4.197'
+
+    compile "org.springframework.data:spring-data-redis"
+    compile "redis.clients:jedis:2.9.0"
+    compile 'org.springframework.cloud:spring-cloud-starter-feign'
+
+    compile group: 'org.springframework', name: 'spring-web'
+
 }
 

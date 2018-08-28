@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+DEBUG=
+DIR=build/libs
+INF_DIR=$DIR/inflated
+
+if [ ! -z "$1" ]; then
+    DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+fi
+
+rm -rf $INF_DIR
+mkdir -p $INF_DIR
+
+unzip $DIR/gs-rest-service-0.1.0.jar -d $INF_DIR
+
+java -version
+java $DEBUG -cp $INF_DIR org.springframework.boot.loader.JarLauncher

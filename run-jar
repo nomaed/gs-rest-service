@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+DEBUG=
+DIR=build/libs
+
+if [ ! -z "$1" ]; then
+    DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+fi
+
+java -version
+java $DEBUG -jar $DIR/gs-rest-service-0.1.0.jar
