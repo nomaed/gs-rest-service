@@ -3,6 +3,8 @@
 DEBUG=
 DIR=build/libs
 INF_DIR=$DIR/inflated
+FILES_DIR=$INF_DIR/BOOT-INF
+MAINCLASS=hello.Application
 
 if [ ! -z "$1" ]; then
     DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
@@ -13,5 +15,12 @@ mkdir -p $INF_DIR
 
 unzip $DIR/gs-rest-service-0.1.0.jar -d $INF_DIR > /dev/null
 
+JARS=$(ls $FILES_DIR/lib)
+CLASSPATH=$FILES_DIR/classes
+
+for JAR in $JARS; do
+    CLASSPATH=$CLASSPATH:$FILES_DIR/lib/$JAR
+done
+
 java -version
-java $DEBUG -cp $INF_DIR org.springframework.boot.loader.JarLauncher
+java $DEBUG -classpath $CLASSPATH hello.Application
